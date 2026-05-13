@@ -32,7 +32,7 @@
 ## How to run
  
 ```bash
-python [file].py
+python linear_algebra.py
 python verify.py
 ```
  
