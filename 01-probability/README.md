@@ -4,9 +4,9 @@
  
 ## What this covers
  
- - 
- - 
- - 
+ - Bayes theorem
+ - Expectation & varience
+ - Maximum Likelihood Estimation (MLE)
 
 ## What clicked
  
@@ -26,16 +26,16 @@
 ## Files
  
 <!-- One line per file. A reader should know what's in each without opening it. -->
-- `[file].py` — 
+- `probability.py` — contains manually implemented functions
 - `verify.py` — checked against `[library function name]`
 - `notes.pdf` — full notes from the source material
 ## How to run
  
 ```bash
-python linear_algebra.py
+python probability.py
 python verify.py
 ```
  
 ## Status
  
-> Implementations done and verified. Synthesis written from memory.
+> Done with paper work, functions in progress.
