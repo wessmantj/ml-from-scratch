@@ -1,6 +1,6 @@
 # probability
 
-> [One-line summary]
+> Probability and some statistic primitives implemented from scratch in pure Python, verified against NumPy.
  
 ## What this covers
  
@@ -27,8 +27,8 @@
  
 <!-- One line per file. A reader should know what's in each without opening it. -->
 - `probability.py` — contains manually implemented functions
-- `verify.py` — checked against `[library function name]`
-- `notes.pdf` — full notes from the source material
+- `verify.py` — checkes `probability.py` against its NumPy equivelent.
+- `.pdf` — full notes from the source material
 ## How to run
  
 ```bash
@@ -38,4 +38,4 @@ python verify.py
  
 ## Status
  
-> Done with paper work, functions in progress.
+> Starting with paper work, functions in progress.
