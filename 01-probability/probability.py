@@ -1,19 +1,13 @@
-# birthday problem
-n = 1
-for n in range(365):
+# returns the probability that at least two of n people share a birthday.
+def birthday_problem(n):
     product = 1
     for i in range(1, n + 1):
-        product = product * (365 - i) / 365
-    prob = 1 - product
-    print(n)
-    print(prob)
-    if prob >= 0.5:
-        break
+        product *= (365 - i) / 365
+    return 1 - product
 
+# n = 22 is over 50%
 
-# takes floats, returns posterior.
-
-def bayes(prior, likelihood, evidence):
+def bayes(prior, likelihood, evidence): 
     pass
 def cdf(x, distribution):
     pass
