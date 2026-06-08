@@ -15,11 +15,24 @@ def factorial(n):
         res *= i
     return res
 
-print(factorial(5))
-
 def n_choose_k(n, k):
-    pass
 
+    if k < 0 or k > n:
+        return 0
+    
+    k = min(k, n-k)
+
+    numerator = 1
+    denominator = 1
+
+    for i in range(k):
+        numerator *= (n - i)
+        denominator *= (i + 1)
+    
+    return numerator // denominator
+
+
+print(n_choose_k(10, 3))
 def bernoulli_pmf(k, p):
     pass
 
