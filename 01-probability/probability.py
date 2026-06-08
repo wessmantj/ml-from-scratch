@@ -16,7 +16,6 @@ def factorial(n):
     return res
 
 def n_choose_k(n, k):
-
     if k < 0 or k > n:
         return 0
     
@@ -31,13 +30,24 @@ def n_choose_k(n, k):
     
     return numerator // denominator
 
-
-print(n_choose_k(10, 3))
 def bernoulli_pmf(k, p):
-    pass
+    if k == 1:
+        return p
+    elif k == 0:
+        return 1 - p
+    else:
+        return 0
 
 def bernoulli_sample(k, n, p):
-    pass
+    if k < 0 or k > n:
+        return 0
+    
+    combinations = n_choose_k(n, k)
+
+    probability = combinations * (p ** k) * ((1 - p) ** (n - k))
+
+    return probability
+
 
 def binomial_pmf(k, n, p):
     pass
