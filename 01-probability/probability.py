@@ -74,7 +74,21 @@ def gaussian_cdf(x, mu, sigma):
     return 0.5 * (1 + math.erf((x - mu) / denominator))
 
 def multinomial_pmf(counts, probs):
-    pass
+    
+    n = sum(counts)
+
+    numerator = factorial(n)
+
+    denominator = 1
+    for count in counts:
+        denominator *= factorial(count)
+
+    match = 1
+    for count, prob in (counts, probs):
+        match *= (prob * counts)
+
+    
+    return (numerator / denominator) * match
 
 def bayes(prior, likelihood, evidence): 
     pass
