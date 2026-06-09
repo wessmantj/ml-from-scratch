@@ -1,11 +1,10 @@
+import math
 # returns the probability that at least two of n people share a birthday.
 def birthday_problem(n):
     product = 1
     for i in range(n):
         product *= (365 - i) / 365
     return 1 - product
-
-# n = 22 is over 50%
 
 
 def factorial(n):
@@ -14,6 +13,7 @@ def factorial(n):
     for i in range(1, n + 1):
         res *= i
     return res
+
 
 def n_choose_k(n, k):
     if k < 0 or k > n:
@@ -30,6 +30,7 @@ def n_choose_k(n, k):
     
     return numerator // denominator
 
+
 def bernoulli_pmf(k, p):
     if k == 1:
         return p
@@ -37,6 +38,7 @@ def bernoulli_pmf(k, p):
         return 1 - p
     else:
         return 0
+
 
 def bernoulli_sample(k, n, p):
     if k < 0 or k > n:
@@ -50,13 +52,26 @@ def bernoulli_sample(k, n, p):
 
 
 def binomial_pmf(k, n, p):
-    pass
+    if k < 0 or k > n:
+        return 0
+    
+    combinations = n_choose_k(n, k)
+
+    res = combinations * (p ** k) * ((1 - p) ** (n - k))
+
+    return res
+
 
 def gaussian_pdf(x, mu, sigma):
-    pass
+    denominator = sigma * (math.sqrt(2 * math.pi))
+    exponent = -0.5 * ((x - mu)/ sigma) ** 2
+
+    return ((1/(denominator)) * math.exp(exponent))
 
 def gaussian_cdf(x, mu, sigma):
-    pass
+    denominator = sigma * (math.sqrt(2))
+    
+    return 0.5 * (1 + math.erf((x - mu) / denominator))
 
 def multinomial_pmf(counts, probs):
     pass
