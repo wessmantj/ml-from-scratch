@@ -27,7 +27,7 @@
 ## Files
  
 <!-- One line per file. A reader should know what's in each without opening it. -->
-- `calculus.py` — contains manually implemented functions
+- `calculu.py` — contains manually implemented functions
 - `verify.py` — checked against `[library function name]`
 - `notes.pdf` — full notes from the source material
 ## How to run

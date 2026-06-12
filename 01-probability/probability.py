@@ -2,14 +2,14 @@ import math
 import random
 from typing import Tuple, List
 
-# returns the probability that at least two of n people share a birthday.
+# calculates the probability that at least two of n people share a birthday.
 def birthday_problem(n):
     product = 1
     for i in range(n):
         product *= (365 - i) / 365
     return 1 - product
 
-# returns the factorial for some value n
+# calculates the factorial of a given integer n
 def factorial(n):
     res = 1
     
@@ -17,7 +17,7 @@ def factorial(n):
         res *= i
     return res
 
-# returns the end product of some n choose some k as an int
+# calculates the number of cominations (n choose k) as an integer
 def n_choose_k(n, k):
     if k < 0 or k > n:
         return 0
@@ -33,7 +33,7 @@ def n_choose_k(n, k):
     
     return numerator // denominator
 
-# bernoulli's formula, returns either 1 or 9, yes or no, etc.
+# returns the probability mass function (PMF) of a Bernoulli distribution for outcome k (0 or 1)
 def bernoulli_pmf(k, p):
     if k == 1:
         return p
@@ -42,7 +42,7 @@ def bernoulli_pmf(k, p):
     else:
         return 0
 
-# bernoullis formula reworked for getting k sucesses in n trials
+# calculates the probability of exactly k successes in n trails using the Bernoulli process
 def bernoulli_sample(k, n, p):
     if k < 0 or k > n:
         return 0
@@ -53,7 +53,7 @@ def bernoulli_sample(k, n, p):
 
     return probability
 
-#  give the probability of k succcesses out of n independent trials
+#  calculates the probability of exactly k successes out of n independent trails (Binomial PMF)
 def binomial_pmf(k, n, p):
     if k < 0 or k > n:
         return 0
@@ -64,29 +64,29 @@ def binomial_pmf(k, n, p):
 
     return res
 
-# mean
+# calculates the expected value (mean) of a binomial distribution
 def binomial_mean(n, p):
     return n * p
 
-# variande
+# calculates the varience of a binomial dstribution
 def binomial_variance(n, p):
     return n * p * (1 - p)
 
 
-#  gives the height of the gaussian curve at a given point x
+#  calculates the probability desnity (height of the curve) for a Gaussian distribution at point x
 def gaussian_pdf(x, mu, sigma):
     denominator = sigma * (math.sqrt(2 * math.pi))
     exponent = -0.5 * ((x - mu)/ sigma) ** 2
 
     return ((1/(denominator)) * math.exp(exponent))
 
-#mcalculates the probability that a value will be less than or equal to x
+#  calculates the cumulative probability that a value will be less than or equal to x (Gaussian CDF)
 def gaussian_cdf(x, mu, sigma):
     denominator = sigma * (math.sqrt(2))
     
     return 0.5 * (1 + math.erf((x - mu) / denominator))
 
-
+# calculates the probability of observing a specific set of counts given their respective probabilities
 def multinomial_pmf(counts, probs):
 
     n = sum(counts)
@@ -104,11 +104,11 @@ def multinomial_pmf(counts, probs):
 
     return (numerator / denominator) * match
 
-
+# calculates the posterior probability for a single event using Bayes' Theorem
 def bayes(prior, likelihood, evidence): 
     return (likelihood * prior) / evidence
 
-
+# calculates the normalized posterior porbabilities given lists of priors and likelihoods
 def bayes_posterior(priors, likelihoods): 
     unnormalized = []
 
@@ -124,14 +124,14 @@ def bayes_posterior(priors, likelihoods):
 
     return posteriors
 
-
+# calculates the expected value (mean) of a discrete random variable
 def expectations(values, probs):
     mean = 0
     for value, prob in zip(values, probs):
         mean += value * prob
     return mean
 
-
+# calculates the variance of a discrete random variable given its values and probabilities
 def variance(values, probs):
     mean = expectations(values, probs)
     expectation_x_squared = 0
@@ -139,13 +139,13 @@ def variance(values, probs):
         expectation_x_squared += (value ** 2) * prob
     return expectation_x_squared - (mean ** 2)
 
-
+# calculates the arithmetic mean (avg) of a list of data points
 def sample_mean(data: List):
     count = len(data)
     total = sum(data)
     return total / count
 
-
+# calculates the variance of a dataset given specific delta degrees of freedom (ddof)
 def sample_variance(data, ddof):
     mean = sample_mean(data)
     n = len(data)
@@ -153,7 +153,7 @@ def sample_variance(data, ddof):
 
     return var
 
-
+# calculates the population covariance between two datasets of equal length
 def covariance(x, y):
     if len(x) != len(y):
         return 0
@@ -163,6 +163,7 @@ def covariance(x, y):
     cov = sum((x[i] - mean_x) * (y[i] - mean_y) for i in range(n)) / n
     return cov
 
+# calculates the Pearson correlation coefficient between two datasets
 def correlation(x, y):
     cov = covariance(x, y)
     std_x = math.sqrt(sample_variance(x, ddof=0))
@@ -171,6 +172,7 @@ def correlation(x, y):
         return 0
     return cov / (std_x * std_y)
 
+# calculates the sum of the log-likelihoods for a dataset given a distribution and its parameters
 def log_likelihood(data, dist, params):
     ll = 0
     if dist == "bernoulli":
@@ -183,14 +185,17 @@ def log_likelihood(data, dist, params):
             ll += math.log(gaussian_pdf(x, mu, sigma))
     return ll
 
+# calculates the Maximum Likelihood Estimate (MLE) for the probability paramter of a Bernoulli distribution
 def mle_bernoulli(data):
     return sum(data) / len(data)
 
+# calculates the Maximum Likelihood Estimates (MLE) for the mean and standard deviation of a Gaussian distribution
 def mle_gaussian(data):
     mu = sample_mean(data)
     sigma_squared = sample_variance(data, ddof=0)
     return (mu, math.sqrt(sigma_squared))
 
+# simulates the Law of Large Numbers by tracking the running proportions of successes over max_n, trials
 def simulate_lln(p, max_n):
     running_sum = 0
     proportions = []
@@ -200,12 +205,14 @@ def simulate_lln(p, max_n):
         proportions.append(running_sum / i)
     return proportions
 
+# simulates the Central Limit Theorem (CLT) by returning a list of sample means from multiple generated random samples
 def simulate_clt(sampler, num_samples, sample_size):
     sample_means = []
     for _ in range(num_samples):
         sample = [sampler() for _ in range(sample_size)]
         sample_means.append(sample_mean(sample))
     return sample_means
+
 
 
 
