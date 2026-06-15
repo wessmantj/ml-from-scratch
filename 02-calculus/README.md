@@ -1,6 +1,6 @@
 # calculus
 
-> [One-line summary]
+> Calculus primitives implemented from scratch in pure Python and verified.
  
 ## What this covers
  
@@ -27,7 +27,7 @@
 ## Files
  
 <!-- One line per file. A reader should know what's in each without opening it. -->
-- `calculu.py` — contains manually implemented functions
+- `calculus.py` — contains manually implemented functions
 - `verify.py` — checked against `[library function name]`
 - `notes.pdf` — full notes from the source material
 ## How to run
