@@ -80,4 +80,14 @@ def test_mat_vec_multiply_length_mismatch():
     with pytest.raises(ValueError):
             mat_vec_multiply([[1, 2], [2, 3]], [1, 2, 3])
 
-# --- project_data tests --- 
+# --- project_data test --- 
+
+@pytest.mark.parametrize("d,pc", [
+    ([[5, 1, 4], [4, 1, 5], [2, 5, 2], [1, 5, 1], [3, 3, 3]], [1, -1, 1]),
+    ([[1.5, -2.0], [0.0, 4.0]], [2.0, 0.5]),   # floats + negatives
+    ([[1, 2, 3]], [1, 0, 1]),                  # single data point
+    ([[0, 0, 0], [1, 2, 3]], [4, 5, 6]),       # zero row
+])
+def test_project_data_correctness(d, pc):
+    # Checks each data point projected onto the principal component matches numpy
+    assert np.allclose(project_data(d, pc), np.array(d) @ pc)
