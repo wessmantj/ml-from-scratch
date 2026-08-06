@@ -49,6 +49,10 @@ def test_magnitude_correctness(a):
     # Checks a normal vector computes to the same output as numpy function
     assert magnitude(a) == pytest.approx(np.linalg.norm(a))
 
+def test_magnitude_length_is_handled():
+    # Checks magnitude of a single vector never raises on valid input
+    assert magnitude([3, 4]) == pytest.approx(5.0)
+
 # --- cosine_similarity test ---
 
 @pytest.mark.parametrize("a,b", [
@@ -59,6 +63,16 @@ def test_magnitude_correctness(a):
 def test_cosine_similarity_correctness(a, b):
     # Checks a normal vector pair computes the same output as numpy function
     assert cosine_similarity(a, b) == pytest.approx(np.dot(a, b) / (np.linalg.norm(a) * (np.linalg.norm(b))))
+
+def test_cosine_similarity_zero_vector():
+    # Checks a zero vector raises ZeroDivisionError from the zero magnitude
+    with pytest.raises(ZeroDivisionError):
+        cosine_similarity([1, 2, 3], [0, 0, 0])
+
+def test_cosine_similarity_length_mismatch():
+    # Checks mismatched lengths raise ValueError from the underlying dot_product
+    with pytest.raises(ValueError):
+        cosine_similarity([1, 2], [1, 2, 3])
 
 # --- mat_vec_multiply tests ---
 
@@ -92,6 +106,11 @@ def test_project_data_correctness(d, pc):
     # Checks each data point projected onto the principal component matches numpy
     assert np.allclose(project_data(d, pc), np.array(d) @ pc)
 
+def test_project_data_length_mismatch():
+    # Checks a row shorter than the principal component raises ValueError
+    with pytest.raises(ValueError):
+        project_data([[1, 2]], [1, 2, 3])
+
 # --- is_orthogonal test ---
 
 def test_is_orthogonal_correctness():
@@ -114,7 +133,6 @@ def test_forward_pass_correctness(layers, vec):
     for layer in layers:
         numpy_result = np.array(layer) @ numpy_result
     assert np.allclose(forward_pass(layers, vec), numpy_result)
-
 
 # --- attention_scores test ---
 
@@ -148,6 +166,10 @@ def test_l1_norm_correctness(a):
     # Checks l1 norm function against numpy
     assert np.allclose(l1_norm(a), np.linalg.norm(a, ord=1))
 
+def test_l1_norm_empty():
+    # Checks the l1 norm of an empty vector is zero
+    assert l1_norm([]) == 0
+
 # --- l2_norm test ---
 
 @pytest.mark.parametrize("a", [
@@ -158,6 +180,10 @@ def test_l1_norm_correctness(a):
 def test_l2_norm_correctness(a):
     # Checks l2 norm function against numpy
     assert np.allclose(l2_norm(a), np.linalg.norm(a, ord=2))
+
+def test_l2_norm_empty():
+    # Checks the l2 norm of an empty vector is zero
+    assert l2_norm([]) == 0
 
 # --- low_rank_approximation tests ---
 
@@ -183,32 +209,3 @@ def test_low_rank_approximation_correctness(seed, shape, k):
 ])
 def test_mat_mult_correctness(A, B):
     assert np.allclose(mat_mult(A, B), np.array(A) @ np.array(B))
-
-# --- error path tests ---
-
-def test_cosine_similarity_zero_vector():
-    # Checks a zero vector raises ZeroDivisionError from the zero magnitude
-    with pytest.raises(ZeroDivisionError):
-        cosine_similarity([1, 2, 3], [0, 0, 0])
-
-def test_cosine_similarity_length_mismatch():
-    # Checks mismatched lengths raise ValueError from the underlying dot_product
-    with pytest.raises(ValueError):
-        cosine_similarity([1, 2], [1, 2, 3])
-
-def test_magnitude_length_is_handled():
-    # Checks magnitude of a single vector never raises on valid input
-    assert magnitude([3, 4]) == pytest.approx(5.0)
-
-def test_project_data_length_mismatch():
-    # Checks a row shorter than the principal component raises ValueError
-    with pytest.raises(ValueError):
-        project_data([[1, 2]], [1, 2, 3])
-
-def test_l1_norm_empty():
-    # Checks the l1 norm of an empty vector is zero
-    assert l1_norm([]) == 0
-
-def test_l2_norm_empty():
-    # Checks the l2 norm of an empty vector is zero
-    assert l2_norm([]) == 0
