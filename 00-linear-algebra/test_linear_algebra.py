@@ -91,3 +91,86 @@ def test_mat_vec_multiply_length_mismatch():
 def test_project_data_correctness(d, pc):
     # Checks each data point projected onto the principal component matches numpy
     assert np.allclose(project_data(d, pc), np.array(d) @ pc)
+
+# --- is_orthogonal test ---
+
+def test_is_orthogonal_correctness():
+    # Takes a known orthogonal pair and compares bool to numpy equivelent 
+    assert np.allclose(is_orthogonal([1, 0, 0], [0, 1, 0]), np.dot([1, 0, 0], [0, 1, 0]) == 0)
+
+def test_is_non_orthogonal():
+    # Takes a known non-ortogonal pair and compares bool to numpy equivelent
+    assert np.allclose(is_orthogonal([1, 2, 3], [4, 5, 6]), np.dot([1, 2, 3], [4, 5, 6]) == 0) 
+
+# --- forward_pass test ---
+
+@pytest.mark.parametrize("layers,vec", [
+    ([[[1, 0], [0, 1]], [[2, 0], [0, 2]]], [3, 4]),
+    ([[[1, 0], [1, 1]], [[2, 0], [3, 2]]], [4, 5]),
+])
+def test_forward_pass_correctness(layers, vec):
+    # Checks forward pass result againt chained matrix multiplication in numpy
+    numpy_result = np.array(vec, dtype=float)
+    for layer in layers:
+        numpy_result = np.array(layer) @ numpy_result
+    assert np.allclose(forward_pass(layers, vec), numpy_result)
+
+
+# --- attention_scores test ---
+
+@pytest.mark.parametrize("query,keys", [
+    ([1, 0, 1], [[1, 2, 3], [4, 5, 6], [7, 8, 9]]),
+    ([1, 1, 0], [[9, 2, 3], [4, 2, 5], [7, 7, 2]])
+])
+def test_attention_scores_correctness(query, keys):
+    # Checks attention scores fuction against numpy equivelent
+    assert np.allclose(attention_scores(query, keys), np.array(keys) @ query)
+
+# --- transpose test ---
+
+@pytest.mark.parametrize("m", [
+    [[1, 2, 3], [4, 5, 6]],
+    [[3, 2, 1], [3, 7, 8]],
+    [[2, 4, 1], [6, 7, 7]]
+])
+def test_transpose_correctness(m):
+    # Checks transpose function on matrices against numpy
+    assert np.allclose(transpose(m), np.array(m).T)
+
+# --- l1_norm test ---
+
+@pytest.mark.parametrize("a", [
+    [1, 2, 4, 7, 2, 8],
+    [2, 3, 4, 1, 5, 6],
+    [2, 3, 0, 0, 3, 4]
+])
+def test_l1_norm_correctness(a):
+    # Checks l1 norm function against numpy
+    assert np.allclose(l1_norm(a), np.linalg.norm(a, ord=1))
+
+# --- l2_norm test ---
+
+@pytest.mark.parametrize("a", [
+    [1, 2, 4, 7, 2, 8],
+    [2, 3, 4, 1, 5, 6],
+    [2, 3, 0, 0, 3, 4]
+])
+def test_l2_norm_correctness(a):
+    # Checks l2 norm function against numpy
+    assert np.allclose(l2_norm(a), np.linalg.norm(a, ord=2))
+
+# --- low_rank_approximation tests ---
+
+@pytest.mark.parametrize("seed,shape,k", [
+    (42, (5, 4), 2),
+    (0,  (3, 3), 1),
+    (7,  (6, 4), 3),
+])
+def test_low_rank_approximation_correctness(seed, shape, k):
+    # Testing low rank approximation function against numpy
+    rng = np.random.default_rng(seed)
+    A = rng.random(shape)
+    U, sigma, Vt = np.linalg.svd(A, full_matrices=False)
+    expected = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+    got = low_rank_approximation(U.tolist(), sigma.tolist(), Vt.tolist(), k)
+    assert np.allclose(got, expected)
