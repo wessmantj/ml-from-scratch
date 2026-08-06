@@ -95,12 +95,12 @@ def test_project_data_correctness(d, pc):
 # --- is_orthogonal test ---
 
 def test_is_orthogonal_correctness():
-    # Takes a known orthogonal pair and compares bool to numpy equivelent 
-    assert np.allclose(is_orthogonal([1, 0, 0], [0, 1, 0]), np.dot([1, 0, 0], [0, 1, 0]) == 0)
+    # Takes a known orthogonal pair and checks the function returns True
+    assert is_orthogonal([1, 0, 0], [0, 1, 0]) == True
 
 def test_is_non_orthogonal():
-    # Takes a known non-ortogonal pair and compares bool to numpy equivelent
-    assert np.allclose(is_orthogonal([1, 2, 3], [4, 5, 6]), np.dot([1, 2, 3], [4, 5, 6]) == 0) 
+    # Takes a known non-orthogonal pair and checks the function returns False
+    assert is_orthogonal([1, 2, 3], [4, 5, 6]) == False
 
 # --- forward_pass test ---
 
@@ -174,3 +174,41 @@ def test_low_rank_approximation_correctness(seed, shape, k):
     expected = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
     got = low_rank_approximation(U.tolist(), sigma.tolist(), Vt.tolist(), k)
     assert np.allclose(got, expected)
+
+# --- mat_mult test ---
+
+@pytest.mark.parametrize("A,B", [
+    ([[1, 2, 3], [4, 5, 6]], [[7, 8], [9, 10], [11, 12]]),   # 2x3 @ 3x2
+    ([[1, 0], [0, 1]], [[5, 6], [7, 8]]),                    # identity
+])
+def test_mat_mult_correctness(A, B):
+    assert np.allclose(mat_mult(A, B), np.array(A) @ np.array(B))
+
+# --- error path tests ---
+
+def test_cosine_similarity_zero_vector():
+    # Checks a zero vector raises ZeroDivisionError from the zero magnitude
+    with pytest.raises(ZeroDivisionError):
+        cosine_similarity([1, 2, 3], [0, 0, 0])
+
+def test_cosine_similarity_length_mismatch():
+    # Checks mismatched lengths raise ValueError from the underlying dot_product
+    with pytest.raises(ValueError):
+        cosine_similarity([1, 2], [1, 2, 3])
+
+def test_magnitude_length_is_handled():
+    # Checks magnitude of a single vector never raises on valid input
+    assert magnitude([3, 4]) == pytest.approx(5.0)
+
+def test_project_data_length_mismatch():
+    # Checks a row shorter than the principal component raises ValueError
+    with pytest.raises(ValueError):
+        project_data([[1, 2]], [1, 2, 3])
+
+def test_l1_norm_empty():
+    # Checks the l1 norm of an empty vector is zero
+    assert l1_norm([]) == 0
+
+def test_l2_norm_empty():
+    # Checks the l2 norm of an empty vector is zero
+    assert l2_norm([]) == 0
