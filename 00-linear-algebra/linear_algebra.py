@@ -97,4 +97,3 @@ def mat_mult(A, B):
     result_cols = [mat_vec_multiply(A, col) for col in B_t]
     return  transpose(result_cols)
 
-

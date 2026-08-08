@@ -28,26 +28,55 @@ from probability import (
     simulate_lln
 )
 
-# --- birthday_problem test ---
+# --- birthday_problem tests ---
 
-def test_birthday_problem_correctness():
-    ...
+def test_birthday_problem_over_fifty():
+    # 23 is the smallest group where P(shared birthday) exceeds 50%
+    assert birthday_problem(23) > 0.50
+    assert birthday_problem(22) < 0.50
+
+def test_birthday_problem_over_ninetynine():
+    # 57 is the smallest group where P(shared birthday) exceeds 99%
+    assert birthday_problem(57) > 0.99
+    assert birthday_problem(56) < 0.99
 
 # --- factorial test ---
 
-def test_factorial_correctness():
-    ...
+@pytest.mark.parametrize("n", [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 20, 1002, 9404, 93])
+def test_factorial_correctness(n):
+    # Checks factorial function against math.factorial
+    assert factorial(n) == math.factorial(n)
 
 # --- n_choose_k tests ---
 
-def test_n_choose_k_correctness():
-    ...
+@pytest.mark.parametrize("n,k", [
+    [10,3],
+    [5, 0],
+    [5, 5],
+    [2, 8]
+])
+def test_n_choose_k_correctness(n, k):
+    # Checks n_choose_k against math.comb
+    assert n_choose_k(n, k) == math.comb(n, k)
 
 # --- bernoulli_pmf tests ---
 
-def test_bernoulli_pmf_correctness():
-    ...
+@pytest.mark.parametrize("k, p, expected", [
+    (1, 0.3, 0.3),      # success returns p
+    (0, 0.3, 0.7),      # failure returns 1 - p
+    (2, 0.3, 0.0),      # impossible 
+    (-1, 0.3, 0.0),     
+    (1, 1.0, 1.0),      
+    (1, 0.0, 0.0),      
+])
+def test_bernoulli_pmf_correctness(k, p, expected):
+    assert bernoulli_pmf(k, p) == pytest.approx(expected)
 
+@pytest.mark.parametrize("p", [0.0, 0.1, 0.5, 0.9, 1.0])
+def test_bernoulli_pmf_sums_to_one(p):
+    # Every PMF's outcomes must sum to 1
+    assert bernoulli_pmf(0, p) + bernoulli_pmf(1, p) == pytest.approx(1.0)
+    
 # --- bernoulli_sample tests ---
 
 def test_bernoulli_sample_correctness():
