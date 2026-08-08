@@ -24,7 +24,7 @@ Every function here reappears in the models I'm about to build. `forward_pass` i
 ## Files
  
 - `linear_algebra.py` — contains manually implemented functions
-- `verify.py` — diffs each function in `linear_algebra.py` against its NumPy equivalent
+- `test_linear_algebra.py` — diffs each function in `linear_algebra.py` against its NumPy equivalent
 - `linear-algebra-notes-01.pdf`, `linear-algebra-notes-02.pdf`  — full notes from the source material
 
 ## How to run
@@ -32,6 +32,7 @@ Every function here reappears in the models I'm about to build. `forward_pass` i
 ```bash
 python linear_algebra.py
 python verify.py
+python test_linear_algebra.py.  # UPDATED TEST SUITE
 ```
  
 ## Sources
@@ -42,4 +43,4 @@ python verify.py
 
 ## Status
  
-> Implementations done and verified. Synthesis written from memory.
+> Implementations done and verified. Synthesis written from memory. TODO: Final third of linear algebra for ML.
