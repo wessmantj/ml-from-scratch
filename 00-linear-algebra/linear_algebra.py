@@ -92,7 +92,6 @@ def low_rank_approximation(U, sigma, Vt, k):
 
     return mat_mult(US_k, Vt_k)
 
-    
 def mat_mult(A, B):
     B_t = transpose(B) # columns of B become rows, now iterable as vectors
     result_cols = [mat_vec_multiply(A, col) for col in B_t]
